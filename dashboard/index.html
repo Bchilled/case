@@ -4,250 +4,345 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CASE FMS — Field Ops</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #1a2d5a;
-    --navy-dark: #0f1e3d;
-    --green: #6abf4b;
-    --green-dark: #52a033;
-    --white: #ffffff;
-    --off-white: #f4f6f9;
-    --gray: #6b7a99;
-    --light-gray: #e2e8f0;
-    --red: #d93025;
-    --amber: #d97706;
-    --border: #dde3ed;
-    --text: #1a2d5a;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Open Sans', sans-serif; background: var(--off-white); color: var(--text); min-height: 100vh; }
+:root {
+  --navy: #1a2d5a; --navy-dark: #0f1e3d; --green: #6abf4b; --green-dark: #4a9e30;
+  --white: #fff; --bg: #f0f3f8; --gray: #7a8aaa; --border: #dce3ef;
+  --text: #1a2d5a; --red: #d93025; --amber: #d97706; --light: #e8edf7;
+  --panel: #ffffff; --teams: #6264a7;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; }
 
-  .top-bar { background: var(--navy-dark); color: rgba(255,255,255,0.7); padding: 0 32px; height: 36px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; letter-spacing: 0.5px; }
+/* TOP BAR */
+.topbar { background:var(--navy-dark); color:rgba(255,255,255,0.65); height:28px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; font-size:11px; letter-spacing:0.5px; }
 
-  header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 68px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; }
+/* HEADER */
+header { background:var(--white); border-bottom:1px solid var(--border); height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+.logo-wrap { display:flex; align-items:center; gap:12px; }
+.logo-img { height:32px; }
+.logo-div { width:1px; height:24px; background:var(--border); }
+.logo-sub { font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--navy); }
+.hdr-right { display:flex; align-items:center; gap:12px; }
+.user-av { width:32px; height:32px; background:var(--navy); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:800; font-size:11px; color:white; }
+.user-txt .name { font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; color:var(--navy); }
+.user-txt .role { font-size:10px; color:var(--gray); }
+.btn-sm { border:none; padding:5px 14px; border-radius:14px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+.btn-green { background:var(--green); color:white; }
+.btn-green:hover { background:var(--green-dark); }
+.btn-teams { background:var(--teams); color:white; }
 
-  .logo-area { display: flex; align-items: center; gap: 16px; }
-  .logo-img { height: 40px; }
-  .logo-divider { width: 1px; height: 30px; background: var(--border); }
-  .logo-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); letter-spacing: 1.5px; text-transform: uppercase; }
+/* LAYOUT: sidebar | left-col | right-col */
+.layout { display:grid; grid-template-columns:180px 1fr 1fr; height:calc(100vh - 80px); overflow:hidden; }
 
-  .header-right { display: flex; align-items: center; gap: 16px; }
-  .user-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); }
-  .user-role { color: var(--gray); font-size: 11px; text-align: right; }
-  .user-avatar { width: 38px; height: 38px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; color: white; }
+/* SIDEBAR */
+.sidebar { background:var(--navy); overflow-y:auto; padding:12px 0; }
+.slabel { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.35); padding:12px 14px 4px; }
+.sitem { display:flex; align-items:center; gap:8px; padding:7px 14px; color:rgba(255,255,255,0.6); font-size:12px; cursor:pointer; border-left:2px solid transparent; transition:all 0.12s; }
+.sitem:hover { background:rgba(255,255,255,0.07); color:white; }
+.sitem.active { background:rgba(106,191,75,0.15); border-left-color:var(--green); color:white; }
+.sbadge { margin-left:auto; font-family:'Montserrat',sans-serif; font-size:9px; font-weight:700; padding:1px 5px; border-radius:8px; background:var(--green); color:white; }
+.sbadge.r { background:var(--red); }
+.sbadge.a { background:var(--amber); }
+.sbadge.m { background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.5); }
+.sdiv { height:1px; background:rgba(255,255,255,0.07); margin:8px 14px; }
 
-  .btn-green { background: var(--green); color: white; border: none; padding: 8px 18px; border-radius: 20px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-  .btn-green:hover { background: var(--green-dark); }
+/* COLUMNS */
+.col { overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:12px; }
+.col-left { border-right:1px solid var(--border); }
 
-  .main { display: grid; grid-template-columns: 240px 1fr 340px; height: calc(100vh - 104px); }
+/* SECTION HEADERS */
+.sh { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.sh-title { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--navy); }
+.sh-count { font-size:10px; color:var(--gray); }
 
-  .sidebar { background: var(--navy); padding: 20px 0; overflow-y: auto; }
-  .sidebar-label { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); padding: 14px 20px 6px; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: rgba(255,255,255,0.65); font-size: 13px; cursor: pointer; transition: all 0.15s; border-left: 3px solid transparent; }
-  .nav-item:hover { background: rgba(255,255,255,0.07); color: white; }
-  .nav-item.active { background: rgba(106,191,75,0.15); border-left-color: var(--green); color: white; }
-  .badge { margin-left: auto; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; background: var(--green); color: white; }
-  .badge.red { background: var(--red); }
-  .badge.amber { background: var(--amber); }
-  .badge.muted { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); }
-  .sdiv { height: 1px; background: rgba(255,255,255,0.08); margin: 10px 20px; }
+/* STAT ROW */
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.stat { background:white; border:1px solid var(--border); border-radius:6px; padding:10px 12px; display:flex; align-items:center; gap:10px; }
+.stat-ico { width:34px; height:34px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.stat-ico.r { background:rgba(217,48,37,0.08); }
+.stat-ico.a { background:rgba(217,119,6,0.08); }
+.stat-ico.g { background:rgba(106,191,75,0.08); }
+.stat-n { font-family:'Montserrat',sans-serif; font-size:22px; font-weight:800; color:var(--navy); line-height:1; }
+.stat-l { font-size:9px; color:var(--gray); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-top:1px; }
 
-  .center { overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+/* EMAIL CARDS */
+.ecard { background:white; border:1px solid var(--border); border-radius:6px; padding:10px 12px; margin-bottom:6px; cursor:pointer; transition:all 0.12s; border-left:3px solid transparent; }
+.ecard:hover { box-shadow:0 2px 8px rgba(0,0,0,0.07); }
+.ecard.u { border-left-color:var(--red); }
+.ecard.mo { border-left-color:var(--amber); }
+.ecard.sel { border-color:var(--navy); box-shadow:0 2px 8px rgba(26,45,90,0.1); }
+.ecard.noise { opacity:0.55; border-left-color:var(--border); }
+.etop { display:flex; justify-content:space-between; align-items:center; margin-bottom:2px; }
+.efrom { font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px; color:var(--navy); }
+.etime { font-size:10px; color:var(--gray); }
+.esubj { font-size:11px; font-weight:600; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.eprev { font-size:10px; color:var(--gray); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.etags { display:flex; gap:5px; margin-top:6px; flex-wrap:wrap; }
+.tag { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:700; letter-spacing:0.3px; text-transform:uppercase; padding:1px 6px; border-radius:3px; }
+.tag.action { background:rgba(217,48,37,0.08); color:var(--red); }
+.tag.mon { background:rgba(217,119,6,0.08); color:var(--amber); }
+.tag.sched { background:rgba(106,191,75,0.1); color:#2d8a1a; }
+.tag.chain { background:var(--light); color:var(--gray); border:1px solid var(--border); }
+.tag.teams { background:rgba(98,100,167,0.1); color:var(--teams); }
+.tag.after5 { background:rgba(26,45,90,0.07); color:var(--navy); }
 
-  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-  .stat-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-  .stat-icon { width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-  .stat-icon.r { background: rgba(217,48,37,0.1); }
-  .stat-icon.a { background: rgba(217,119,6,0.1); }
-  .stat-icon.g { background: rgba(106,191,75,0.1); }
-  .stat-num { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 800; color: var(--navy); line-height: 1; }
-  .stat-lbl { font-size: 11px; color: var(--gray); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+/* TASKS */
+.tcard { background:white; border:1px solid var(--border); border-radius:6px; padding:9px 12px; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+.tcheck { width:15px; height:15px; border:2px solid var(--border); border-radius:3px; flex-shrink:0; cursor:pointer; }
+.tcheck:hover { border-color:var(--green); }
+.ttext { font-size:11px; flex:1; line-height:1.4; }
+.tdue { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:700; text-transform:uppercase; white-space:nowrap; }
+.tdue.a { color:var(--amber); }
+.tdue.r { color:var(--red); }
 
-  .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .sec-title { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); }
-  .sec-count { font-size: 11px; color: var(--gray); }
+/* CALENDAR */
+.cal-week { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; }
+.cal-day { background:white; border:1px solid var(--border); border-radius:6px; padding:8px; min-height:60px; }
+.cal-day.today { border-color:var(--navy); background:rgba(26,45,90,0.03); }
+.cal-day-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+.cal-dow { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:700; text-transform:uppercase; color:var(--gray); }
+.cal-date { font-family:'Montserrat',sans-serif; font-size:13px; font-weight:800; color:var(--navy); }
+.cal-date.today-num { background:var(--navy); color:white; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; }
+.cal-event { border-radius:3px; padding:2px 5px; margin-bottom:3px; font-size:9px; font-weight:600; line-height:1.3; }
+.cal-event.busy { background:rgba(26,45,90,0.1); color:var(--navy); border-left:2px solid var(--navy); }
+.cal-event.teams-ev { background:rgba(98,100,167,0.1); color:var(--teams); border-left:2px solid var(--teams); }
+.cal-event.dead { background:rgba(217,48,37,0.08); color:var(--red); border-left:2px solid var(--red); }
 
-  .email-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; border-left: 4px solid transparent; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-  .email-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); transform: translateY(-1px); }
-  .email-card.urgent { border-left-color: var(--red); }
-  .email-card.monitor { border-left-color: var(--amber); }
-  .email-card.selected { border-color: var(--navy); box-shadow: 0 3px 12px rgba(26,45,90,0.12); }
-  .email-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  .email-from { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); }
-  .email-time { font-size: 11px; color: var(--gray); }
-  .email-subject { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-  .email-preview { font-size: 12px; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .email-footer { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-  .tag { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; }
-  .tag.action { background: rgba(217,48,37,0.1); color: var(--red); }
-  .tag.monitor { background: rgba(217,119,6,0.1); color: var(--amber); }
-  .tag.scheduled { background: rgba(106,191,75,0.12); color: #2d8a1a; }
-  .tag.chain { background: var(--off-white); color: var(--gray); border: 1px solid var(--border); }
+/* DETAIL / DRAFT PANEL */
+.detail { background:white; border:1px solid var(--border); border-radius:6px; display:flex; flex-direction:column; overflow:hidden; }
+.dhdr { background:var(--navy); padding:12px 16px; color:white; flex-shrink:0; }
+.dtitle { font-family:'Montserrat',sans-serif; font-weight:800; font-size:13px; margin-bottom:2px; }
+.dmeta { font-size:10px; color:rgba(255,255,255,0.6); }
+.dbody { flex:1; overflow-y:auto; padding:12px 16px; display:flex; flex-direction:column; gap:12px; }
+.dlabel { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--gray); margin-bottom:5px; }
+.dtext { font-size:11px; line-height:1.6; }
+.crow { display:flex; gap:8px; padding:5px 0; border-bottom:1px solid var(--light); font-size:11px; align-items:center; }
+.crow:last-child { border-bottom:none; }
+.clbl { color:var(--gray); width:48px; font-size:10px; font-weight:600; }
+.cval { color:var(--navy); font-weight:600; }
+.draftbox { background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:10px 12px; font-size:11px; line-height:1.65; }
+.sched-ok { font-size:10px; color:#2d8a1a; font-weight:600; margin-top:5px; }
 
-  .task-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-  .task-check { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; cursor: pointer; }
-  .task-check:hover { border-color: var(--green); }
-  .task-text { font-size: 13px; flex: 1; }
-  .task-due { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; color: var(--amber); text-transform: uppercase; white-space: nowrap; }
-  .task-due.red { color: var(--red); }
+/* DRAFT BOTTOM */
+.draft-area { border-top:1px solid var(--border); padding:10px 14px; background:var(--bg); flex-shrink:0; }
+.draft-lbl { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--navy); margin-bottom:7px; }
+textarea.dinput { background:white; border:1px solid var(--border); border-radius:5px; padding:8px 10px; font-size:11px; font-family:'Inter',sans-serif; line-height:1.55; color:var(--text); min-height:55px; outline:none; width:100%; resize:none; margin-bottom:8px; }
+textarea.dinput:focus { border-color:var(--navy); }
+.dact { display:flex; gap:6px; align-items:center; }
+.btn-navy { background:var(--navy); color:white; border:none; padding:6px 12px; border-radius:5px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:9px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+.btn-out { background:transparent; color:var(--gray); border:1px solid var(--border); padding:6px 10px; border-radius:5px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:9px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+.ns-note { margin-left:auto; font-size:9px; color:var(--red); font-weight:700; font-family:'Montserrat',sans-serif; opacity:0.65; letter-spacing:0.5px; }
 
-  .detail-panel { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .detail-header { background: var(--navy); padding: 20px 24px; color: white; }
-  .detail-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; margin-bottom: 4px; }
-  .detail-meta { font-size: 12px; color: rgba(255,255,255,0.6); }
-  .detail-body { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 18px; }
-  .dlabel { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
-  .dtext { font-size: 13px; line-height: 1.65; color: var(--text); }
-  .contact-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--light-gray); font-size: 12px; align-items: center; }
-  .contact-row:last-child { border-bottom: none; }
-  .clabel { color: var(--gray); width: 55px; font-size: 11px; font-weight: 600; }
-  .cval { color: var(--navy); font-weight: 600; }
-  .draft-box { background: var(--off-white); border: 1px solid var(--border); border-radius: 6px; padding: 14px; font-size: 13px; line-height: 1.65; color: var(--text); }
-  .sched-note { font-size: 12px; color: #2d8a1a; font-weight: 600; margin-top: 8px; }
+/* QUICK LINKS */
+.links { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.lnk { background:white; border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-size:11px; font-weight:600; color:var(--navy); text-decoration:none; display:flex; align-items:center; gap:8px; cursor:pointer; transition:all 0.12s; }
+.lnk:hover { border-color:var(--navy); background:var(--light); }
+.lnk-ico { font-size:14px; }
 
-  .draft-area { border-top: 1px solid var(--border); padding: 16px 24px; background: var(--off-white); }
-  .draft-label { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--navy); margin-bottom: 10px; }
-  .draft-input { background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; font-size: 13px; line-height: 1.6; color: var(--text); min-height: 70px; outline: none; width: 100%; font-family: 'Open Sans', sans-serif; resize: none; margin-bottom: 10px; }
-  .draft-input:focus { border-color: var(--navy); }
-  .draft-actions { display: flex; gap: 8px; align-items: center; }
-  .btn-navy { background: var(--navy); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-  .btn-navy:hover { background: var(--navy-dark); }
-  .btn-out { background: transparent; color: var(--gray); border: 1px solid var(--border); padding: 8px 14px; border-radius: 6px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; cursor: pointer; }
-  .btn-out:hover { border-color: var(--navy); color: var(--navy); }
-  .never-send { margin-left: auto; font-size: 10px; color: var(--red); font-weight: 700; font-family: 'Montserrat', sans-serif; opacity: 0.7; }
+/* RULE NOTE */
+.rule-note { background:rgba(26,45,90,0.05); border:1px solid rgba(26,45,90,0.12); border-radius:5px; padding:7px 10px; font-size:10px; color:var(--navy); display:flex; align-items:center; gap:6px; }
 
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-thumb { background: var(--light-gray); border-radius: 4px; }
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
 </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <span>CASE FACILITIES MANAGEMENT SOLUTIONS &nbsp;|&nbsp; FIELD OPS PORTAL</span>
-  <span>Thu, March 26 2026 &nbsp;|&nbsp; bsnow@casefms.com</span>
+<div class="topbar">
+  <span>CASE FACILITIES MANAGEMENT SOLUTIONS &nbsp;·&nbsp; FIELD OPS PORTAL</span>
+  <span>Thu March 26, 2026 &nbsp;·&nbsp; 11:22 PM &nbsp;·&nbsp; bsnow@casefms.com</span>
 </div>
 
 <header>
-  <div class="logo-area">
+  <div class="logo-wrap">
     <img class="logo-img" src="https://www.casefms.com/wp-content/uploads/2021/03/Case-LOGO-FINAL_Color-Logo.svg" alt="CASE">
-    <div class="logo-divider"></div>
-    <div class="logo-subtitle">Field Ops Dashboard</div>
+    <div class="logo-div"></div>
+    <div class="logo-sub">Field Ops</div>
   </div>
-  <div class="header-right">
-    <button class="btn-green">⟳ Sync Inbox</button>
-    <div>
-      <div class="user-name">Brent Snow</div>
-      <div class="user-role">Regional Manager</div>
+  <div class="hdr-right">
+    <button class="btn-sm btn-teams">⬡ Teams</button>
+    <button class="btn-sm btn-green">⟳ Sync</button>
+    <div class="user-txt" style="text-align:right">
+      <div class="name">Brent Snow</div>
+      <div class="role">Regional Manager</div>
     </div>
-    <div class="user-avatar">BS</div>
+    <div class="user-av">BS</div>
   </div>
 </header>
 
-<div class="main">
+<div class="layout">
 
+  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sidebar-label">Inbox Triage</div>
-    <div class="nav-item active"><span>🔴</span> Needs Action <span class="badge red">2</span></div>
-    <div class="nav-item"><span>🟡</span> Monitor <span class="badge amber">1</span></div>
-    <div class="nav-item"><span>⚪</span> Noise / Chains <span class="badge muted">3</span></div>
+    <div class="slabel">Inbox</div>
+    <div class="sitem active"><span>🔴</span> Action <span class="sbadge r">2</span></div>
+    <div class="sitem"><span>🟡</span> Monitor <span class="sbadge a">1</span></div>
+    <div class="sitem"><span>⚪</span> Noise <span class="sbadge m">3</span></div>
     <div class="sdiv"></div>
-    <div class="sidebar-label">Drafts</div>
-    <div class="nav-item"><span>🗓</span> Scheduled <span class="badge">1</span></div>
-    <div class="nav-item"><span>📝</span> Pending Review <span class="badge muted">0</span></div>
+    <div class="slabel">Drafts</div>
+    <div class="sitem"><span>🗓</span> Scheduled <span class="sbadge">1</span></div>
+    <div class="sitem"><span>📝</span> Review <span class="sbadge m">0</span></div>
     <div class="sdiv"></div>
-    <div class="sidebar-label">Tasks</div>
-    <div class="nav-item"><span>📋</span> Open <span class="badge amber">3</span></div>
-    <div class="nav-item"><span>📅</span> Calendar Today</div>
+    <div class="slabel">Teams</div>
+    <div class="sitem"><span>💬</span> Unread <span class="sbadge a">1</span></div>
+    <div class="sitem"><span>📌</span> Flagged <span class="sbadge m">0</span></div>
     <div class="sdiv"></div>
-    <div class="sidebar-label">Files & Sites</div>
-    <div class="nav-item"><span>📁</span> Job Folders</div>
-    <div class="nav-item"><span>📍</span> Active Sites</div>
-    <div class="nav-item"><span>👥</span> Contacts</div>
+    <div class="slabel">Work</div>
+    <div class="sitem"><span>📋</span> Tasks <span class="sbadge a">3</span></div>
+    <div class="sitem"><span>📅</span> Calendar</div>
+    <div class="sitem"><span>📁</span> Job Files</div>
+    <div class="sitem"><span>📍</span> Sites</div>
+    <div class="sitem"><span>👥</span> Contacts</div>
   </div>
 
-  <div class="center">
+  <!-- LEFT COLUMN -->
+  <div class="col col-left">
 
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-icon r">🔴</div><div><div class="stat-num">2</div><div class="stat-lbl">Needs Action</div></div></div>
-      <div class="stat-card"><div class="stat-icon a">🟡</div><div><div class="stat-num">1</div><div class="stat-lbl">Monitoring</div></div></div>
-      <div class="stat-card"><div class="stat-icon g">✅</div><div><div class="stat-num">1</div><div class="stat-lbl">Draft Scheduled</div></div></div>
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat"><div class="stat-ico r">🔴</div><div><div class="stat-n">2</div><div class="stat-l">Action</div></div></div>
+      <div class="stat"><div class="stat-ico a">🟡</div><div><div class="stat-n">1</div><div class="stat-l">Monitor</div></div></div>
+      <div class="stat"><div class="stat-ico g">✅</div><div><div class="stat-n">1</div><div class="stat-l">Scheduled</div></div></div>
     </div>
 
-    <div>
-      <div class="sec-header">
-        <div class="sec-title">🔴 Needs Your Action</div>
-        <div class="sec-count">2 emails · Today</div>
-      </div>
-      <div class="email-card urgent selected">
-        <div class="email-top"><div class="email-from">Lexi Genik — lgenik@casefms.com</div><div class="email-time">3:12 PM</div></div>
-        <div class="email-subject">Re: Grass Cutting Schedule - Hydro - 2026 Season</div>
-        <div class="email-preview">Looping in @Brent Snow — can you please arrange for site walks?</div>
-        <div class="email-footer"><span class="tag action">Action Required</span><span class="tag scheduled">✓ Draft Scheduled Fri 8AM</span></div>
-      </div>
-      <div class="email-card urgent">
-        <div class="email-top"><div class="email-from">Taylor Buzzeo — tbuzzeo@lfxpm.com</div><div class="email-time">12:32 PM</div></div>
-        <div class="email-subject">SNOW Contract Ending 03/31</div>
-        <div class="email-preview">Following up — post-season inspections not yet received from Giuseppe and Mike</div>
-        <div class="email-footer"><span class="tag action">Action Required</span><span class="tag chain">Deadline Mar 31</span></div>
-      </div>
-    </div>
+    <!-- RULE NOTE -->
+    <div class="rule-note">📏 &nbsp;After-hours emails (after 5PM) scheduled for next morning 8AM unless urgent</div>
 
+    <!-- ACTION EMAILS -->
     <div>
-      <div class="sec-header">
-        <div class="sec-title">🟡 Monitor</div>
-        <div class="sec-count">1 email</div>
+      <div class="sh"><div class="sh-title">🔴 Needs Action</div><div class="sh-count">2 today</div></div>
+
+      <div class="ecard u sel">
+        <div class="etop"><div class="efrom">Lexi Genik</div><div class="etime">3:12 PM</div></div>
+        <div class="esubj">Re: Grass Cutting Schedule - Hydro 2026</div>
+        <div class="eprev">Looping in @Brent Snow — can you please arrange for site walks?</div>
+        <div class="etags"><span class="tag action">Action Req.</span><span class="tag sched">✓ Draft · Fri 8AM</span></div>
       </div>
-      <div class="email-card monitor">
-        <div class="email-top"><div class="email-from">Taylor Buzzeo — tbuzzeo@lfxpm.com</div><div class="email-time">4:52 PM</div></div>
-        <div class="email-subject">Quote Approval @ IO #INO00100 — Whitney Block, 99 Wellesley St W</div>
-        <div class="email-preview">Asking Kevin's team when work was completed — not yet in system</div>
-        <div class="email-footer"><span class="tag monitor">Chain Processing</span></div>
+
+      <div class="ecard u">
+        <div class="etop"><div class="efrom">Taylor Buzzeo</div><div class="etime">12:32 PM</div></div>
+        <div class="esubj">SNOW Contract Ending 03/31</div>
+        <div class="eprev">Post-season inspections not yet received — Giuseppe and Mike</div>
+        <div class="etags"><span class="tag action">Action Req.</span><span class="tag chain">Deadline Mar 31</span></div>
       </div>
     </div>
 
+    <!-- MONITOR -->
     <div>
-      <div class="sec-header"><div class="sec-title">📋 Open Tasks</div></div>
-      <div class="task-card"><div class="task-check"></div><div class="task-text">Arrange site orientation walk — 850 Kipling Ave, Etobicoke (HYD0711)</div><div class="task-due">Before May 6</div></div>
-      <div class="task-card"><div class="task-check"></div><div class="task-text">Follow up with Giuseppe + Mike — post-season snow inspections</div><div class="task-due red">Mar 31</div></div>
-      <div class="task-card"><div class="task-check"></div><div class="task-text">Confirm Whitney Block WO#INO82449227 completion with Kevin's team</div><div class="task-due">Monitor</div></div>
+      <div class="sh"><div class="sh-title">🟡 Monitor</div></div>
+      <div class="ecard mo">
+        <div class="etop"><div class="efrom">Taylor Buzzeo</div><div class="etime">4:52 PM</div></div>
+        <div class="esubj">Quote Approval @ IO #INO00100 — Whitney Block</div>
+        <div class="eprev">Asking Kevin's team when work was completed</div>
+        <div class="etags"><span class="tag mon">Chain Processing</span><span class="tag after5">After 5PM → AM if urgent</span></div>
+      </div>
+    </div>
+
+    <!-- TEAMS -->
+    <div>
+      <div class="sh"><div class="sh-title">💬 Teams</div></div>
+      <div class="ecard">
+        <div class="etop"><div class="efrom">Liam MacDougall</div><div class="etime">7:13 PM</div></div>
+        <div class="esubj">Direct message via Teams</div>
+        <div class="eprev">"Hoping ill..." — message truncated in notification</div>
+        <div class="etags"><span class="tag teams">Teams</span><span class="tag after5">After 5PM → 8AM</span></div>
+      </div>
+    </div>
+
+    <!-- TASKS -->
+    <div>
+      <div class="sh"><div class="sh-title">📋 Open Tasks</div></div>
+      <div class="tcard"><div class="tcheck"></div><div class="ttext">Arrange site walk — 850 Kipling Ave, Etobicoke (HYD0711)</div><div class="tdue a">Before May 6</div></div>
+      <div class="tcard"><div class="tcheck"></div><div class="ttext">Follow up Giuseppe + Mike — snow inspections</div><div class="tdue r">Mar 31</div></div>
+      <div class="tcard"><div class="tcheck"></div><div class="ttext">Confirm Whitney Block WO#INO82449227 with Kevin</div><div class="tdue a">Monitor</div></div>
     </div>
 
   </div>
 
-  <div class="detail-panel">
-    <div class="detail-header">
-      <div class="detail-title">Hydro — Grass Cutting 2026</div>
-      <div class="detail-meta">850 Kipling Ave, Etobicoke &nbsp;·&nbsp; HYD0711</div>
-    </div>
-    <div class="detail-body">
-      <div>
-        <div class="dlabel">Summary</div>
-        <div class="dtext">Tree Doctors submitted the 2026 cut schedule (12 cuts, May–Oct). Lexi answered all compliance questions and tagged you to arrange the mandatory site orientation walk per SOW 5.2 &amp; 5.8. First cut: <strong>May 6, 2026</strong>.</div>
-      </div>
-      <div>
-        <div class="dlabel">Contacts</div>
-        <div class="contact-row"><div class="clabel">Ryan P.</div><div class="cval">647-895-8733 · rp@treedoctors.ca</div></div>
-        <div class="contact-row"><div class="clabel">Jesse B.</div><div class="cval">437-663-5571 · jb@treedoctors.ca</div></div>
-        <div class="contact-row"><div class="clabel">Lexi G.</div><div class="cval">lgenik@casefms.com</div></div>
-      </div>
-      <div>
-        <div class="dlabel">Scheduled Draft</div>
-        <div class="draft-box">Hi Lexi and Ryan,<br><br>Looking forward to a great season — I'll be in touch next week to get the site orientation walk scheduled so we're well ahead of the May 6 start.<br><br>Brent</div>
-        <div class="sched-note">✓ Scheduled · Friday March 27 · 8:00 AM</div>
-      </div>
-    </div>
-    <div class="draft-area">
-      <div class="draft-label">Draft Reply</div>
-      <textarea class="draft-input" placeholder="Select an email to draft a reply. I write it — you send it."></textarea>
-      <div class="draft-actions">
-        <button class="btn-navy">Save to Drafts</button>
-        <button class="btn-out">Edit</button>
-        <span class="never-send">I NEVER SEND · YOU SEND</span>
-      </div>
-    </div>
-  </div>
+  <!-- RIGHT COLUMN -->
+  <div class="col">
 
+    <!-- CALENDAR THIS WEEK -->
+    <div>
+      <div class="sh"><div class="sh-title">📅 This Week — March 23–27</div></div>
+      <div class="cal-week">
+        <div class="cal-day">
+          <div class="cal-day-hdr"><span class="cal-dow">Mon</span><span class="cal-date">23</span></div>
+          <div style="font-size:9px;color:var(--gray);font-style:italic;">No events</div>
+        </div>
+        <div class="cal-day">
+          <div class="cal-day-hdr"><span class="cal-dow">Tue</span><span class="cal-date">24</span></div>
+          <div style="font-size:9px;color:var(--gray);font-style:italic;">No events</div>
+        </div>
+        <div class="cal-day">
+          <div class="cal-day-hdr"><span class="cal-dow">Wed</span><span class="cal-date">25</span></div>
+          <div style="font-size:9px;color:var(--gray);font-style:italic;">No events</div>
+        </div>
+        <div class="cal-day today">
+          <div class="cal-day-hdr"><span class="cal-dow">Thu</span><span class="cal-date today-num">26</span></div>
+          <div class="cal-event busy">9:30–12:30 Routing SF Maps</div>
+          <div class="cal-event busy">1:00–2:00 Team Canada Huddle</div>
+          <div class="cal-event busy">2:00–5:00 TrueContext Training</div>
+        </div>
+        <div class="cal-day">
+          <div class="cal-day-hdr"><span class="cal-dow">Fri</span><span class="cal-date">27</span></div>
+          <div class="cal-event teams-ev">11:00–12:00 Truck Review w/ Rob</div>
+          <div class="cal-event sched" style="background:rgba(106,191,75,0.1);color:#2d8a1a;border-left:2px solid var(--green);">8:00AM Draft → Lexi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAIL PANEL - ACTIVE EMAIL -->
+    <div class="detail">
+      <div class="dhdr">
+        <div class="dtitle">Hydro — Grass Cutting 2026</div>
+        <div class="dmeta">850 Kipling Ave, Etobicoke &nbsp;·&nbsp; HYD0711 &nbsp;·&nbsp; Lexi Genik</div>
+      </div>
+      <div class="dbody">
+        <div>
+          <div class="dlabel">What's happening</div>
+          <div class="dtext">Tree Doctors submitted 12-cut schedule for 2026 season (May–Oct). Lexi answered all Hydro compliance questions and tagged you to arrange the mandatory site orientation walk per SOW 5.2 & 5.8. First cut: <strong>May 6.</strong></div>
+        </div>
+        <div>
+          <div class="dlabel">Contacts</div>
+          <div class="crow"><div class="clbl">Ryan P.</div><div class="cval">647-895-8733 · rp@treedoctors.ca</div></div>
+          <div class="crow"><div class="clbl">Jesse B.</div><div class="cval">437-663-5571 · jb@treedoctors.ca</div></div>
+          <div class="crow"><div class="clbl">Lexi G.</div><div class="cval">lgenik@casefms.com</div></div>
+        </div>
+        <div>
+          <div class="dlabel">Scheduled Draft</div>
+          <div class="draftbox">Hi Lexi and Ryan,<br><br>Looking forward to a great season — I'll be in touch next week to get the site orientation walk scheduled so we're well ahead of the May 6 start.<br><br>Brent</div>
+          <div class="sched-ok">✓ Scheduled · Friday March 27 · 8:00 AM</div>
+        </div>
+      </div>
+      <div class="draft-area">
+        <div class="draft-lbl">Draft Reply</div>
+        <textarea class="dinput" placeholder="Select an email — I draft it, you send it."></textarea>
+        <div class="dact">
+          <button class="btn-navy">Save to Drafts</button>
+          <button class="btn-out">Edit</button>
+          <span class="ns-note">I NEVER SEND · YOU SEND</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div>
+      <div class="sh"><div class="sh-title">🔗 Quick Access</div></div>
+      <div class="links">
+        <a class="lnk" href="https://outlook.office.com/mail" target="_blank"><span class="lnk-ico">📧</span> Outlook Mail</a>
+        <a class="lnk" href="https://outlook.office.com/calendar" target="_blank"><span class="lnk-ico">📅</span> Calendar</a>
+        <a class="lnk" href="https://teams.microsoft.com" target="_blank"><span class="lnk-ico">💬</span> Teams</a>
+        <a class="lnk" href="https://partners.casefms.com" target="_blank"><span class="lnk-ico">🏗️</span> CASE Portal</a>
+        <a class="lnk" href="https://onedrive.live.com" target="_blank"><span class="lnk-ico">📁</span> OneDrive</a>
+        <a class="lnk" href="https://outlook.office.com/mail/drafts" target="_blank"><span class="lnk-ico">📝</span> My Drafts</a>
+      </div>
+    </div>
+
+  </div>
 </div>
+
 </body>
 </html>
