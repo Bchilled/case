@@ -460,16 +460,17 @@ function copyTemplate(type) {
 }
 
 function showSection(section) {
-  document.querySelectorAll('.col, .contacts-panel, .forms-panel').forEach(el => {
-    el.classList.remove('active');
-    if (el.classList.contains('col')) el.style.display = 'none';
-    if (el.classList.contains('contacts-panel')) el.style.display = 'none';
-    if (el.classList.contains('forms-panel')) el.style.display = 'none';
-  });
+  // Hide all panels and cols
+  document.querySelectorAll('.col').forEach(el => el.style.display = 'none');
+  var cp = document.getElementById('contacts-panel');
+  var fp = document.getElementById('forms-panel');
+  if(cp) cp.style.display = 'none';
+  if(fp) fp.style.display = 'none';
+
   if (section === 'contacts') {
-    document.getElementById('contacts-panel').style.display = 'flex';
+    if(cp) cp.style.cssText = 'display:flex;grid-column:2/-1;overflow-y:auto;';
   } else if (section === 'forms') {
-    document.getElementById('forms-panel').style.display = 'flex';
+    if(fp) fp.style.cssText = 'display:flex;grid-column:2/-1;overflow-y:auto;';
   } else {
     document.querySelectorAll('.col').forEach(el => el.style.display = '');
   }
