@@ -219,7 +219,7 @@ header{background:var(--white);border-bottom:1px solid var(--border);height:50px
     <div class="spill" onclick="showSection('inbox')">
       <div class="sdot r"></div>
       <span class="slbl">Needs Action</span>
-      <span class="scnt" id="cnt-action">1</span>
+      <span class="scnt" id="cnt-action">0</span>
     </div>
     <div class="spill" onclick="showSection('inbox')">
       <div class="sdot a"></div>
@@ -241,7 +241,7 @@ header{background:var(--white);border-bottom:1px solid var(--border);height:50px
     <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="slabel">Inbox</div>
-      <div class="sitem on" onclick="showSection('inbox')"><span>📬</span> Email &amp; Teams <span class="sbadge r">1</span></div>
+      <div class="sitem on" onclick="showSection('inbox')"><span>📬</span> Email &amp; Teams <span class="sbadge r" style="background:var(--green);">0</span></div>
 
       <div class="sdiv"></div>
       <div class="slabel">Work</div>
@@ -282,15 +282,8 @@ header{background:var(--white);border-bottom:1px solid var(--border);height:50px
 
         <!-- ACTION -->
         <div>
-          <div class="sh"><div class="sh-t">🔴 Needs Action</div><div class="sh-c">1 item</div></div>
-          <div class="ecard action">
-            <a href="https://outlook.cloud.microsoft/mail/inbox/id/AAQkADU3ZWQ2ODAyLTFmZjItNGFhMS1iZjczLTRjZTM0NWQ5NzA4NQAQAJ83Z6dYM0FSp%2BQWNCa5hUQ%3D" target="_blank">
-              <div class="etop"><div class="efrom">Rob Esposito</div><div class="etime">9:53 AM</div></div>
-              <div class="esubj">RFM / Field Trucks — Fill in your truck info</div>
-              <div class="eprev">Fill in the attached spreadsheet — Truck #160, gas card, camera, GPS</div>
-              <div class="etags"><span class="tag act">Action Required</span><span class="tag ch">Reply with completed form</span></div>
-            </a>
-          </div>
+          <div class="sh"><div class="sh-t">🔴 Needs Action</div><div class="sh-c">0 items</div></div>
+          <div style="font-size:11px;color:var(--gray);padding:10px 12px;background:white;border:1px solid var(--border);border-radius:6px;">✓ All clear — no action needed right now.</div>
         </div>
 
         <!-- MONITOR -->
@@ -530,13 +523,17 @@ Brent Snow | Regional Field Manager | CASE FMS
 
 <script>
 // LOGIN
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  updateTime();
+  setInterval(updateTime, 60000);
+}
 function login() {
   var pw = document.getElementById('pw-input').value;
   if (pw === 'Fordf350!') {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-    updateTime();
-    setInterval(updateTime, 60000);
+    localStorage.setItem('ops_auth','1');
+    showApp();
   } else {
     document.getElementById('login-error').style.display = 'block';
     document.getElementById('pw-input').value = '';
@@ -545,6 +542,7 @@ function login() {
 document.getElementById('pw-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') login();
 });
+if (localStorage.getItem('ops_auth') === '1') { showApp(); }
 
 // TIME
 function updateTime() {
