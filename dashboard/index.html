@@ -178,6 +178,19 @@ textarea.dinput:focus { border-color:var(--navy); }
 
 ::-webkit-scrollbar { width:3px; }
 
+/* FORMS */
+.forms-panel { padding:14px; display:none; flex-direction:column; gap:16px; overflow-y:auto; }
+.form-card { background:white; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+.form-card-hdr { background:var(--navy); color:white; padding:10px 16px; font-family:"Montserrat",sans-serif; font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
+.form-body { padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+.form-preview { background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:12px 14px; font-size:12px; line-height:1.8; color:var(--text); white-space:pre-wrap; font-family:"Inter",sans-serif; }
+.form-field { display:inline; }
+.form-input { border:none; border-bottom:2px solid #6abf4b; background:rgba(106,191,75,0.08); color:var(--navy); font-size:12px; font-family:"Inter",sans-serif; padding:1px 6px; border-radius:3px 3px 0 0; min-width:80px; outline:none; font-weight:600; }
+.form-input:focus { background:rgba(106,191,75,0.15); }
+.copy-btn { width:100%; padding:9px; background:var(--green); color:white; border:none; border-radius:6px; font-family:"Montserrat",sans-serif; font-weight:700; font-size:11px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; margin-top:4px; }
+.copy-btn:hover { background:var(--green-dark); }
+.copy-btn.copied { background:#1a7a4a; }
+
 /* CONTACTS */
 .contacts-panel { padding:14px; display:none; flex-direction:column; gap:12px; }
 .contacts-panel.active { display:flex; }
@@ -255,6 +268,7 @@ textarea.dinput:focus { border-color:var(--navy); }
     <div class="sitem"><span>📁</span> Job Files</div>
     <div class="sitem"><span>📍</span> Sites</div>
     <div class="sitem" onclick="showSection('contacts')"><span>👥</span> Contacts</div>
+    <div class="sitem" onclick="showSection('forms')"><span>📋</span> Templates</div>
   </div>
 
   <!-- LEFT COLUMN -->
@@ -421,14 +435,41 @@ document.getElementById('pw-input').addEventListener('keydown', function(e) {
 });
 </script>
 <script>
+function copyTemplate(type) {
+  const preview = document.getElementById(type + '-preview');
+  const inputs = preview.querySelectorAll('input');
+  let text = preview.innerText;
+  // Replace input values into text
+  inputs.forEach(input => {
+    text = text.replace(input.placeholder || '', input.value);
+  });
+  // Get clean text
+  const clone = preview.cloneNode(true);
+  clone.querySelectorAll('input').forEach(inp => {
+    const span = document.createElement('span');
+    span.textContent = inp.value || inp.placeholder;
+    inp.parentNode.replaceChild(span, inp);
+  });
+  const cleanText = clone.innerText;
+  navigator.clipboard.writeText(cleanText).then(() => {
+    const btn = document.getElementById(type + '-copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 Copy to Clipboard'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
 function showSection(section) {
-  document.querySelectorAll('.col, .contacts-panel').forEach(el => {
+  document.querySelectorAll('.col, .contacts-panel, .forms-panel').forEach(el => {
     el.classList.remove('active');
     if (el.classList.contains('col')) el.style.display = 'none';
     if (el.classList.contains('contacts-panel')) el.style.display = 'none';
+    if (el.classList.contains('forms-panel')) el.style.display = 'none';
   });
   if (section === 'contacts') {
     document.getElementById('contacts-panel').style.display = 'flex';
+  } else if (section === 'forms') {
+    document.getElementById('forms-panel').style.display = 'flex';
   } else {
     document.querySelectorAll('.col').forEach(el => el.style.display = '');
   }
