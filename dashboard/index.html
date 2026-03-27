@@ -419,6 +419,8 @@ textarea.dinput:focus { border-color:var(--navy); }
 </div>
 </div>
 
+
+
 <script>
 function checkPassword() {
   var pw = document.getElementById('pw-input').value;
@@ -433,8 +435,6 @@ function checkPassword() {
 document.getElementById('pw-input').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') checkPassword();
 });
-</script>
-<script>
 function copyTemplate(type) {
   const preview = document.getElementById(type + '-preview');
   const inputs = preview.querySelectorAll('input');
