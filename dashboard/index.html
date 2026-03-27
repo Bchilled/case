@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CASE FMS — Field Ops Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2150;
+    --dark: #28303d;
+    --red: #c8102e;
+    --white: #f0f0f0;
+    --gray: #8a9ab5;
+    --light: #e8edf5;
+    --green: #1a7a4a;
+    --amber: #c87800;
+    --panel: #1a2540;
+    --border: rgba(138,154,181,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--dark);
+    border-bottom: 3px solid var(--red);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-img {
+    height: 36px;
+    filter: brightness(0) invert(1);
+  }
+
+  .logo-divider {
+    width: 2px;
+    height: 28px;
+    background: var(--red);
+  }
+
+  .logo-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .user-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--gray);
+  }
+
+  .user-avatar {
+    width: 34px;
+    height: 34px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: white;
+  }
+
+  .sync-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--gray);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sync-btn:hover { border-color: var(--red); color: var(--white); }
+
+  /* LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 280px 1fr 320px;
+    gap: 0;
+    height: calc(100vh - 64px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    margin-bottom: 8px;
+  }
+
+  .sidebar-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    padding: 8px 24px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    font-size: 14px;
+    color: var(--gray);
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+  .nav-item.active { background: rgba(200,16,46,0.1); border-left-color: var(--red); color: var(--white); }
+
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .badge {
+    margin-left: auto;
+    background: var(--red);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .badge.amber { background: var(--amber); }
+  .badge.green { background: var(--green); }
+
+  /* CENTER PANEL */
+  .center {
+    overflow-y: auto;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .section-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    color: var(--gray);
+  }
+
+  /* EMAIL CARDS */
+  .email-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+    position: relative;
+  }
+
+  .email-card:hover { border-color: var(--border); background: rgba(255,255,255,0.04); }
+  .email-card.urgent { border-left-color: var(--red); }
+  .email-card.monitor { border-left-color: var(--amber); }
+  .email-card.noise { border-left-color: transparent; opacity: 0.5; }
+  .email-card.active { background: rgba(200,16,46,0.08); border-color: rgba(200,16,46,0.3); }
+
+  .email-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .email-from {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .email-time {
+    font-size: 12px;
+    color: var(--gray);
+  }
+
+  .email-subject {
+    font-size: 13px;
+    color: var(--gray);
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .email-preview {
+    font-size: 12px;
+    color: rgba(138,154,181,0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .priority-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+
+  .priority-tag.action { background: rgba(200,16,46,0.2); color: #ff6b7a; }
+  .priority-tag.monitor { background: rgba(200,120,0,0.2); color: #ffa940; }
+  .priority-tag.chain { background: rgba(138,154,181,0.1); color: var(--gray); }
+
+  /* RIGHT PANEL - DETAIL */
+  .detail-panel {
+    background: var(--dark);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .detail-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+
+  .detail-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .detail-meta {
+    font-size: 12px;
+    color: var(--gray);
+  }
+
+  .detail-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+  }
+
+  .detail-section {
+    margin-bottom: 20px;
+  }
+
+  .detail-section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+
+  .detail-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--light);
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .contact-row:last-child { border-bottom: none; }
+  .contact-label { color: var(--gray); width: 60px; font-size: 12px; }
+  .contact-val { color: var(--white); }
+
+  /* DRAFT AREA */
+  .draft-area {
+    border-top: 1px solid var(--border);
+    padding: 16px 24px;
+    background: rgba(0,0,0,0.15);
+  }
+
+  .draft-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+
+  .draft-text {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--light);
+    margin-bottom: 12px;
+    min-height: 80px;
+  }
+
+  .draft-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+
+  .btn-primary { background: var(--red); color: white; }
+  .btn-primary:hover { background: #a50d26; }
+  .btn-ghost { background: transparent; color: var(--gray); border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--white); border-color: var(--gray); }
+
+  .btn-never-send {
+    background: transparent;
+    border: 1px dashed rgba(200,16,46,0.4);
+    color: rgba(200,16,46,0.6);
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  /* TASK SECTION */
+  .task-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .task-check {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .task-check:hover { border-color: var(--red); }
+
+  .task-text { font-size: 13px; flex: 1; }
+  .task-due { font-size: 11px; color: var(--amber); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .stat-num.red { color: var(--red); }
+  .stat-num.amber { color: #ffa940; }
+
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 24px;
+  }
+
+  .scheduled-tag {
+    background: rgba(26,122,74,0.2);
+    color: #4ade80;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <img class="logo-img" src="https://www.casefms.com/wp-content/uploads/2021/03/Case-LOGO-FINAL_Color-Logo.svg" alt="CASE FMS" onerror="this.style.display='none'">
+    <div class="logo-divider"></div>
+    <div class="logo-title">Field Ops</div>
+  </div>
+  <div class="header-right">
+    <div style="font-size:12px; color:var(--gray);">Thu, March 26 2026</div>
+    <button class="sync-btn">⟳ Sync Inbox</button>
+    <div class="user-badge">
+      <div class="user-avatar">BS</div>
+      <div>
+        <div style="color:var(--white); font-size:13px; font-weight:600;">Brent Snow</div>
+        <div style="font-size:11px;">Regional Manager</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Inbox</div>
+      <div class="nav-item active">
+        <span class="nav-icon">🔴</span> Needs Action
+        <span class="badge">2</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🟡</span> Monitor
+        <span class="badge amber">1</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">⚪</span> Chain / Noise
+        <span class="badge" style="background:var(--panel); color:var(--gray);">3</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Drafts</div>
+      <div class="nav-item">
+        <span class="nav-icon">📝</span> Scheduled
+        <span class="badge green">1</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📄</span> Pending Review
+        <span class="badge amber">0</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tasks</div>
+      <div class="nav-item">
+        <span class="nav-icon">📋</span> Open Tasks
+        <span class="badge amber">3</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📅</span> Calendar Today
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Files</div>
+      <div class="nav-item">
+        <span class="nav-icon">📁</span> Job Folders
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🏗️</span> Active Sites
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num red">2</div>
+        <div class="stat-label">Needs Action</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num amber">1</div>
+        <div class="stat-label">Monitor</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Draft Scheduled</div>
+      </div>
+    </div>
+
+    <!-- NEEDS ACTION -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">🔴 Needs Your Action</div>
+        <div class="section-count">2 emails</div>
+      </div>
+
+      <div class="email-card urgent active">
+        <div class="email-top">
+          <div class="email-from">Lexi Genik — lgenik@casefms.com</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="scheduled-tag">✓ Draft Scheduled Fri 8AM</span>
+            <span class="email-time">3:12 PM</span>
+          </div>
+        </div>
+        <div class="email-subject">[External] Re: Grass Cutting Schedule - Hydro - 2026 Season</div>
+        <div class="email-preview">Looping in @Brent Snow — can you please arrange for site walks?</div>
+        <div style="margin-top:8px;">
+          <span class="priority-tag action">● Action Required</span>
+        </div>
+      </div>
+
+      <div class="email-card urgent">
+        <div class="email-top">
+          <div class="email-from">Taylor Buzzeo — tbuzzeo@lfxpm.com</div>
+          <div class="email-time">12:32 PM</div>
+        </div>
+        <div class="email-subject">SNOW Contract Ending 03/31</div>
+        <div class="email-preview">Following up — post-season inspections not yet received from Giuseppe and Mike</div>
+        <div style="margin-top:8px;">
+          <span class="priority-tag action">● Action Required</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONITOR -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">🟡 Monitor</div>
+        <div class="section-count">1 email</div>
+      </div>
+
+      <div class="email-card monitor">
+        <div class="email-top">
+          <div class="email-from">Taylor Buzzeo — tbuzzeo@lfxpm.com</div>
+          <div class="email-time">4:52 PM</div>
+        </div>
+        <div class="email-subject">Quote Approval @ IO #INO00100 — Whitney Block, 99 Wellesley St W Toronto</div>
+        <div class="email-preview">Asking Kevin's team when work was completed — not listed in system yet</div>
+        <div style="margin-top:8px;">
+          <span class="priority-tag monitor">● Chain Processing</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASKS -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">📋 Open Tasks</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-check"></div>
+        <div class="task-text">Arrange site orientation walk — 850 Kipling Ave, Etobicoke (HYD0711)</div>
+        <div class="task-due">Due: Before May 6</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-check"></div>
+        <div class="task-text">Follow up with Giuseppe + Mike — post-season snow inspections (03/31 deadline)</div>
+        <div class="task-due">Due: Mar 31</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-check"></div>
+        <div class="task-text">Confirm Whitney Block WO#INO82449227 completion with Kevin's team</div>
+        <div class="task-due">Monitor</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-panel">
+    <div class="detail-header">
+      <div class="detail-title">Hydro — Grass Cutting 2026</div>
+      <div class="detail-meta">850 Kipling Ave, Etobicoke · HYD0711</div>
+    </div>
+
+    <div class="detail-body">
+
+      <div class="detail-section">
+        <div class="detail-section-label">Summary</div>
+        <div class="detail-text">
+          Tree Doctors submitted 2026 cut schedule (12 cuts, May–Oct). Lexi answered all compliance questions and tagged you to arrange the mandatory site orientation walk per SOW sections 5.2 and 5.8. First cut: <strong>May 6, 2026</strong>.
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">Contacts</div>
+        <div class="contact-row">
+          <div class="contact-label">Ryan P.</div>
+          <div class="contact-val">647-895-8733 · rp@treedoctors.ca</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-label">Jesse B.</div>
+          <div class="contact-val">437-663-5571 · jb@treedoctors.ca</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-label">Lexi G.</div>
+          <div class="contact-val">lgenik@casefms.com</div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">Draft Scheduled</div>
+        <div style="background:rgba(26,122,74,0.1); border:1px solid rgba(26,122,74,0.3); border-radius:4px; padding:12px; font-size:13px; line-height:1.6; color:var(--light);">
+          Hi Lexi and Ryan,<br><br>
+          Looking forward to a great season — I'll be in touch next week to get the site orientation walk scheduled so we're well ahead of the May 6 start.<br><br>
+          Brent
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#4ade80;">✓ Scheduled · Friday March 27 · 8:00 AM</div>
+      </div>
+
+    </div>
+
+    <div class="draft-area">
+      <div class="draft-label">Draft Reply</div>
+      <div class="draft-text" contenteditable="true" style="outline:none;" placeholder="Select an email to draft a reply...">Select an email above to draft a reply. I will write it — you send it.</div>
+      <div class="draft-actions">
+        <button class="btn btn-primary">Save to Drafts</button>
+        <button class="btn btn-ghost">Edit</button>
+        <button class="btn btn-ghost btn-never-send">I NEVER SEND</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
