@@ -73,3 +73,11 @@ These people report to or work closely with Brent. Any direct message or @mentio
 - TrueContext Training (meeting chat)
 - Routing SF Maps (meeting chat)
 - Team Canada Huddle (meeting chat)
+
+## RULE 8 — BROWSER TAB MANAGEMENT
+- ALWAYS call tabs_context_mcp FIRST before navigating anywhere
+- Check what tabs are already open — if Outlook is open, use it, don't open another
+- NEVER open duplicate tabs of the same tool
+- NEVER close or navigate away from Brent's existing tabs
+- Brent has required tabs always open — work within them, not around them
+- If a tab is needed that isn't open, ask Brent before opening it
