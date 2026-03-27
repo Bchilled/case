@@ -14,7 +14,7 @@
 ## Team
 - **Regional Dir:** Dayna Dow
 - **Operations Manager:** Taylor Buzzeo
-- **Account Mgr:** Aya Hassoun
+- **Account Mgr:** Aya Hassoun (AM for this site — Brent splits between Aya and Lexi across sites)
 - **Regional Field Mgr:** Brent Snow
 - **Site Enhancement Coordinator:** Alexandra O'Neil
 
